@@ -10,7 +10,7 @@ services:
       - psqldb
     networks:
       - dataStorageServiceNetwork
-      - gateway_gatewayNetwork
+      - garewaynestrabbit_gatewayNetwork
   psqldb:
     image: postgres:13
     restart: always
