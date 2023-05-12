@@ -82,7 +82,7 @@ export class AppService {
             try{
                 const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
                 await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
-                console.log("Обновлен обьект:" + incomingObjects[l].key)
+                console.log("Обновлен обьект: " + incomingObjects[l].key)
             }catch(e){
                 if(e == 'object not found') {
                     await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
