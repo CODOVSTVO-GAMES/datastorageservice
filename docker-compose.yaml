@@ -38,6 +38,6 @@ services:
 networks:
   dataStorageServiceNetwork:
     driver: bridge
-  gateway_gatewayNetwork:
+  garewaynestrabbit_gatewayNetwork:
     external: true
     
