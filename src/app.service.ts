@@ -187,7 +187,7 @@ export class AppService {
         const dataObjects = new Array<DataObjectsDTO>
         const arr = Object.values(objects)
         for (let l = 0; l < arr.length; l++) {
-            if (arr[l] == 'null' || arr[l] == 'undefined') {
+            if (arr[l] == 'null' || arr[l] == 'undefined' || arr[l] == null || arr[l] == undefined) {
                 console.log("Пришел пустой обьект")
                 continue
             }
