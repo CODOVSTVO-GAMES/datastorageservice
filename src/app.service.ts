@@ -17,8 +17,6 @@ export class AppService {
     ){}
     
     async dataSaveResponser(data: any){
-        const startDate = Date.now()
-
         const responseDTO = new ResponseDTO()
         let status = 200
 
@@ -43,8 +41,6 @@ export class AppService {
         }
         responseDTO.status = status
 
-        const deltaTime = Date.now() - startDate
-        console.log("Запрос set выполнен за " + deltaTime + " ms. status: " + status)//cтатус
         return responseDTO
     }
 
@@ -99,8 +95,6 @@ export class AppService {
     //----------------------------------------
 
     async dataGetResponser(data: any){
-        const startDate = Date.now()
-
         const responseDTO = new ResponseDTO()
         let status = 200
 
@@ -125,8 +119,6 @@ export class AppService {
         }
         responseDTO.status = status
 
-        const deltaTime = Date.now() - startDate
-        console.log("Запрос get выполнен за " + deltaTime + " ms. status: " + status)//cтатус
         return responseDTO
     }
 
@@ -195,6 +187,7 @@ export class AppService {
         const dataObjects = new Array<DataObjectsDTO>
         const arr = Object.values(objects)
         for(let l = 0; l < arr.length; l++){
+            console.log(arr[l])
             dataObjects.push(new DataObjectsDTO(arr[l].name, arr[l].obj))
         }
         return dataObjects
