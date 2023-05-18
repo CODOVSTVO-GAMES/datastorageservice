@@ -71,26 +71,25 @@ export class AppService {
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
-        console.log(incomingObjects)
-        console.log(JSON.stringify(incomingObjects))
+        console.log('incoming' + incomingObjects)
 
-        const savedObjects = await this.findAllDataObjectsByUserId(userId)
+        // const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
-        for (let l = 0; l < incomingObjects.length; l++) {
-            try {
-                const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
-                await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
-                console.log("Обновлен обьект: " + incomingObjects[l].key)
-            } catch (e) {
-                if (e == 'object not found') {
-                    await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
-                    console.log("Сохранен новый обьект: " + incomingObjects[l].key)
-                    continue
-                }
-                console.log("Хз чего произошло")
-                throw e
-            }
-        }
+        // for (let l = 0; l < incomingObjects.length; l++) {
+        //     try {
+        //         const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
+        //         await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
+        //         console.log("Обновлен обьект: " + incomingObjects[l].key)
+        //     } catch (e) {
+        //         if (e == 'object not found') {
+        //             await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
+        //             console.log("Сохранен новый обьект: " + incomingObjects[l].key)
+        //             continue
+        //         }
+        //         console.log("Хз чего произошло")
+        //         throw e
+        //     }
+        // }
         return new ResonseDataDTO()
     }
 
@@ -160,12 +159,15 @@ export class AppService {
         for (let l = 0; l < incomingObjects.length; l++) {
             try {
                 const obj = this.getObjectByKey(incomingObjects[l], savedObjects)
-                responseObjects.push(new DataObjectsDTO(obj.className, obj.data))
+
+
+                //доделать
+                responseObjects.push(new DataObjectsDTO(obj.className, {}))
             } catch (e) {
                 if (e == 'object not found') {
                     console.log("Запрошен пустой класс!!!")
                     //log
-                    responseObjects.push(new DataObjectsDTO(incomingObjects[l], '{}'))
+                    responseObjects.push(new DataObjectsDTO(incomingObjects[l], {}))
                 }
             }
         }

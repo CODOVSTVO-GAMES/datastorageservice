@@ -9,7 +9,6 @@ export class AppController {
 
     @EventPattern('save_data')
     async saveData(data: any): Promise<ResponseDTO> {
-        console.log('request')
         return await this.appService.dataSaveResponser(data)
     }
 
