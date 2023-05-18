@@ -72,7 +72,9 @@ export class AppService {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
         // console.log('incoming' + incomingObjects)
-        console.log('incoming00000' + incomingObjects[0])
+        console.log('incoming00000 ' + incomingObjects[0])
+        console.log('incoming00000 ' + incomingObjects[0].toString())
+        console.log('incoming00000 ' + JSON.stringify(incomingObjects[0]))
 
 
 
