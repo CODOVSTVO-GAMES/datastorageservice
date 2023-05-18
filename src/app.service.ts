@@ -71,9 +71,12 @@ export class AppService {
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
-        console.log('incoming' + incomingObjects)
+        // console.log('incoming' + incomingObjects)
+        console.log('incoming00000' + incomingObjects[0])
 
-        // const savedObjects = await this.findAllDataObjectsByUserId(userId)
+
+
+        const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
         // for (let l = 0; l < incomingObjects.length; l++) {
         //     try {
@@ -195,7 +198,6 @@ export class AppService {
                 console.log("Пришел пустой обьект")
                 continue
             }
-            console.log(arr[l])
             dataObjects.push(new DataObjectsDTO(arr[l].name, arr[l].obj))
         }
         return dataObjects
