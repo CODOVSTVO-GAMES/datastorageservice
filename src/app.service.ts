@@ -72,29 +72,27 @@ export class AppService {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
         // console.log('incoming' + incomingObjects)
-        console.log('incoming00000 ' + incomingObjects[0])
-        console.log('incoming00000 ' + incomingObjects[0].toString())
         console.log('incoming00000 ' + JSON.stringify(incomingObjects[0]))
-
-
+        console.log(incomingObjects[0].key)
+        console.log(incomingObjects[0].value)
 
         const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
-        // for (let l = 0; l < incomingObjects.length; l++) {
-        //     try {
-        //         const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
-        //         await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
-        //         console.log("Обновлен обьект: " + incomingObjects[l].key)
-        //     } catch (e) {
-        //         if (e == 'object not found') {
-        //             await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
-        //             console.log("Сохранен новый обьект: " + incomingObjects[l].key)
-        //             continue
-        //         }
-        //         console.log("Хз чего произошло")
-        //         throw e
-        //     }
-        // }
+        for (let l = 0; l < incomingObjects.length; l++) {
+            try {
+                const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
+                await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
+                console.log("Обновлен обьект: " + incomingObjects[l].key)
+            } catch (e) {
+                if (e == 'object not found') {
+                    await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
+                    console.log("Сохранен новый обьект: " + incomingObjects[l].key)
+                    continue
+                }
+                console.log("Хз чего произошло")
+                throw e
+            }
+        }
         return new ResonseDataDTO()
     }
 
@@ -226,22 +224,25 @@ export class AppService {
         return objects
     }
 
-    async updateObjectsValueByUserIdAndKey(object: Objects, value: string) {
+    async updateObjectsValueByUserIdAndKey(object: Objects, value: object) {
+        const str = JSON.stringify(value)
+
         await this.dataStorageRepo
             .createQueryBuilder()
             .update(Objects)
-            .set({ data: value })
+            .set({ data: str })
             .where({ id: object.id })
             .execute()
     }
 
-    async saveObject(userId: string, key: string, value: string) {
+    async saveObject(userId: string, key: string, value: object) {
+        const str = JSON.stringify(value)
         await this.dataStorageRepo.save(
             await this.dataStorageRepo.create(
                 {
                     userId: userId,
                     className: key,
-                    data: value
+                    data: str
                 }
             )
         )
