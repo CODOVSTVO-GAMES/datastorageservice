@@ -71,6 +71,8 @@ export class AppService {
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
+        console.log(incomingObjects)
+        console.log(JSON.stringify(incomingObjects))
 
         const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
