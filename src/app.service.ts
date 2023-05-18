@@ -71,10 +71,6 @@ export class AppService {
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
-        // console.log('incoming' + incomingObjects)
-        console.log('incoming00000 ' + JSON.stringify(incomingObjects[0]))
-        console.log(incomingObjects[0].key)
-        console.log(incomingObjects[0].value)
 
         const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
@@ -153,8 +149,6 @@ export class AppService {
         const userId = dataDTO.userId
         const incomingObjects = this.parseDataObjectsGET(dataDTO.dataObjects)
 
-        console.log("Запрошены обьекты: " + incomingObjects)
-
         const savedObjects = await this.findAllDataObjectsByUserId(userId)
 
         const responseObjects: DataObjectsDTO[] = []
@@ -162,15 +156,17 @@ export class AppService {
         for (let l = 0; l < incomingObjects.length; l++) {
             try {
                 const obj = this.getObjectByKey(incomingObjects[l], savedObjects)
+                const data = JSON.parse(obj.data)
 
-
-                //доделать
-                responseObjects.push(new DataObjectsDTO(obj.className, {}))
+                responseObjects.push(new DataObjectsDTO(obj.className, data))
             } catch (e) {
                 if (e == 'object not found') {
                     console.log("Запрошен пустой класс!!!")
                     //log
                     responseObjects.push(new DataObjectsDTO(incomingObjects[l], {}))
+                }
+                else {
+                    throw "ЧТо то тут не так"
                 }
             }
         }
@@ -204,7 +200,6 @@ export class AppService {
     }
 
     parseDataObjectsGET(objects: object): Array<string> {
-        console.log(objects)
         const dataObjects = []
         const arr: string[] = Object.values(objects)
         for (let l = 0; l < arr.length; l++) {
