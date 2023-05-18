@@ -156,8 +156,9 @@ export class AppService {
         for (let l = 0; l < incomingObjects.length; l++) {
             try {
                 const obj = this.getObjectByKey(incomingObjects[l], savedObjects)
+                console.log('--' + obj)
                 const data = JSON.parse(obj.data)
-
+                console.log('ff' + data)
                 responseObjects.push(new DataObjectsDTO(obj.className, data))
             } catch (e) {
                 if (e == 'object not found') {
