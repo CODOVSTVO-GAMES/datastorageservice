@@ -6,7 +6,7 @@ export class Objects {
     id: number;
 
     @Column()
-    userId: string
+    accountId: string
 
     @Column()
     className: string

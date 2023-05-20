@@ -59,7 +59,7 @@ export class AppService {
         let dataDTO
         try {
             const obj = JSON.parse(JSON.stringify(requestDTO.data))
-            dataDTO = new DataDTO(obj.userId, obj.sessionId, obj.dataObjects)
+            dataDTO = new DataDTO(obj.accountId, obj.sessionId, obj.dataObjects)
         } catch (e) {
             throw "parsing data error"
         }
@@ -69,19 +69,19 @@ export class AppService {
 
 
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
-        const userId = dataDTO.userId
+        const accountId = dataDTO.accountId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
 
-        const savedObjects = await this.findAllDataObjectsByUserId(userId)
+        const savedObjects = await this.findAllDataObjectsByAccountId(accountId)
 
         for (let l = 0; l < incomingObjects.length; l++) {
             try {
                 const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
-                await this.updateObjectsValueByUserIdAndKey(obj, incomingObjects[l].value)
+                await this.updateObjectsValueByAccountIdAndKey(obj, incomingObjects[l].value)
                 console.log("Обновлен обьект: " + incomingObjects[l].key)
             } catch (e) {
                 if (e == 'object not found') {
-                    await this.saveObject(userId, incomingObjects[l].key, incomingObjects[l].value)
+                    await this.saveObject(accountId, incomingObjects[l].key, incomingObjects[l].value)
                     console.log("Сохранен новый обьект: " + incomingObjects[l].key)
                     continue
                 }
@@ -137,7 +137,7 @@ export class AppService {
         let dataDTO
         try {
             const obj = JSON.parse(JSON.stringify(requestDTO.data))
-            dataDTO = new DataDTO(obj.userId, obj.sessionId, obj.dataObjects)
+            dataDTO = new DataDTO(obj.accountId, obj.sessionId, obj.dataObjects)
         } catch (e) {
             throw "parsing data error"
         }
@@ -146,10 +146,10 @@ export class AppService {
     }
 
     async dataGetLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
-        const userId = dataDTO.userId
+        const accountId = dataDTO.accountId
         const incomingObjects = this.parseDataObjectsGET(dataDTO.dataObjects)
 
-        const savedObjects = await this.findAllDataObjectsByUserId(userId)
+        const savedObjects = await this.findAllDataObjectsByAccountId(accountId)
 
         const responseObjects: DataObjectsDTO[] = []
 
@@ -207,18 +207,18 @@ export class AppService {
         return dataObjects
     }
 
-    async findAllDataObjectsByUserId(userId: string): Promise<Array<Objects>> {
+    async findAllDataObjectsByAccountId(accountId: string): Promise<Array<Objects>> {
         const objects = await this.dataStorageRepo.find(
             {
                 where: {
-                    userId: userId
+                    accountId: accountId
                 }
             }
         )
         return objects
     }
 
-    async updateObjectsValueByUserIdAndKey(object: Objects, value: object) {
+    async updateObjectsValueByAccountIdAndKey(object: Objects, value: object) {
         const str = JSON.stringify(value)
 
         await this.dataStorageRepo
@@ -229,12 +229,12 @@ export class AppService {
             .execute()
     }
 
-    async saveObject(userId: string, key: string, value: object) {
+    async saveObject(accountId: string, key: string, value: object) {
         const str = JSON.stringify(value)
         await this.dataStorageRepo.save(
             await this.dataStorageRepo.create(
                 {
-                    userId: userId,
+                    accountId: accountId,
                     className: key,
                     data: str
                 }
