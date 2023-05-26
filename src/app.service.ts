@@ -44,8 +44,7 @@ export class AppService {
     async dataSaveHandler(data: any): Promise<ResonseDataDTO> {
         let dataDTO
         try {
-            const obj = JSON.parse(JSON.stringify(data))
-            dataDTO = new DataDTO(obj.accountId, obj.sessionId, obj.dataObjects)
+            dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
         } catch (e) {
             throw "parsing data error"
         }
@@ -109,8 +108,7 @@ export class AppService {
     async dataGetHandler(data: any): Promise<ResonseDataDTO> {
         let dataDTO
         try {
-            const obj = JSON.parse(data)
-            dataDTO = new DataDTO(obj.accountId, obj.sessionId, obj.dataObjects)
+            dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
         } catch (e) {
             throw "parsing data error"
         }
