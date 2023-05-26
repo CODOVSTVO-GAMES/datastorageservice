@@ -27,9 +27,7 @@ export class AppService {
             if (e == 'sessions not found' || e == 'session expired') {
                 status = 403//перезапуск клиента
             }
-            else if (e == 'server hash bad' || e == 'server DTO bad') {
-                status = 401//активно сигнализировать в логи
-            } else if (e == 'too many requests') {
+            else if (e == 'too many requests') {
                 status = 429//повторить запрос позже
             } else if (e == 'parsing data error') {
                 status = 400 //сервер не знает что делать
@@ -94,9 +92,7 @@ export class AppService {
             if (e == 'sessions not found' || e == 'session expired') {
                 status = 403//перезапуск клиента
             }
-            else if (e == 'server hash bad' || e == 'server DTO bad') {
-                status = 401//активно сигнализировать в логи
-            } else if (e == 'too many requests') {
+            else if (e == 'too many requests') {
                 status = 429//повторить запрос позже
             } else if (e == 'parsing data error') {
                 status = 400 //сервер не знает что делать
@@ -113,7 +109,7 @@ export class AppService {
     async dataGetHandler(data: any): Promise<ResonseDataDTO> {
         let dataDTO
         try {
-            const obj = JSON.parse(JSON.stringify(data))
+            const obj = JSON.parse(data)
             dataDTO = new DataDTO(obj.accountId, obj.sessionId, obj.dataObjects)
         } catch (e) {
             throw "parsing data error"
