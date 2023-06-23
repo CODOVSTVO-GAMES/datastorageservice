@@ -77,10 +77,9 @@ export class AppService {
                     await this.saveObject(accountId, incomingObjects[l].key, incomingObjects[l].value)
                     console.log("Сохранен новый обьект: " + incomingObjects[l].key)
                     continue
-                } else {
-                    console.log("Хз чего произошло")
-                    throw e
                 }
+                console.log("Хз чего произошло")
+                throw e
             }
         }
         return new ResonseDataDTO()
