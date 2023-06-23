@@ -65,9 +65,9 @@ export class AppService {
             console.log(incomingObjects[l].key)
             console.log(incomingObjects[l].value)
 
-            // if (incomingObjects[l].value == []) {
-            //     continue
-            // }
+            if (incomingObjects[l].key == undefined || incomingObjects[l].value == undefined) {
+                continue
+            }
             try {
                 const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
                 await this.updateObjectsValueByAccountIdAndKey(obj, incomingObjects[l].value)
