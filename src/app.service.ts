@@ -61,6 +61,13 @@ export class AppService {
         const savedObjects = await this.findAllDataObjectsByAccountId(accountId)
 
         for (let l = 0; l < incomingObjects.length; l++) {
+            console.log('берем обьект')
+            console.log(incomingObjects[l].key)
+            console.log(incomingObjects[l].value)
+
+            // if (incomingObjects[l].value == []) {
+            //     continue
+            // }
             try {
                 const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
                 await this.updateObjectsValueByAccountIdAndKey(obj, incomingObjects[l].value)
@@ -70,13 +77,10 @@ export class AppService {
                     await this.saveObject(accountId, incomingObjects[l].key, incomingObjects[l].value)
                     console.log("Сохранен новый обьект: " + incomingObjects[l].key)
                     continue
+                } else {
+                    console.log("Хз чего произошло")
+                    throw e
                 }
-                else if (e == 'QueryFailedError') {
-                    console.log('сохранен пустой обьект')
-                    continue
-                }
-                console.log("Хз чего произошло")
-                throw e
             }
         }
         return new ResonseDataDTO()
