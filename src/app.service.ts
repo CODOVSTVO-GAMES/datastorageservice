@@ -16,6 +16,7 @@ export class AppService {
     ) { }
 
     async dataSaveResponser(data: any) {
+        console.log(data)
         const responseDTO = new ResponseDTO()
         let status = 200
 
