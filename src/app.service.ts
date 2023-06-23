@@ -71,6 +71,10 @@ export class AppService {
                     console.log("Сохранен новый обьект: " + incomingObjects[l].key)
                     continue
                 }
+                else if (e == 'QueryFailedError') {
+                    console.log('сохранен пустой обьект')
+                    continue
+                }
                 console.log("Хз чего произошло")
                 throw e
             }
