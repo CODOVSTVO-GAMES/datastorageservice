@@ -16,13 +16,12 @@ export class AppService {
     ) { }
 
     async dataSaveResponser(data: any) {
-        console.log(data)
         const responseDTO = new ResponseDTO()
         let status = 200
 
         try {
-            const resonseDataDTO = await this.dataSaveHandler(data)
-            responseDTO.data = resonseDataDTO
+            const dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
+            responseDTO.data = await this.dataSaveLogic(dataDTO)
         }
         catch (e) {
             if (e == 'sessions not found' || e == 'session expired') {
@@ -42,18 +41,6 @@ export class AppService {
         return responseDTO
     }
 
-    async dataSaveHandler(data: any): Promise<ResonseDataDTO> {
-        let dataDTO
-        try {
-            dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
-        } catch (e) {
-            throw "parsing data error"
-        }
-
-        return this.dataSaveLogic(dataDTO)
-    }
-
-
     async dataSaveLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
         const accountId = dataDTO.accountId
         const incomingObjects = this.parseDataObjectsPOST(dataDTO.dataObjects)
@@ -61,24 +48,16 @@ export class AppService {
         const savedObjects = await this.findAllDataObjectsByAccountId(accountId)
 
         for (let l = 0; l < incomingObjects.length; l++) {
-            console.log('берем обьект')
-            console.log(incomingObjects[l].key)
-            console.log(incomingObjects[l].value)
 
-            // if (incomingObjects[l].key == undefined || incomingObjects[l].value == undefined) {
-            //     continue
-            // }
             try {
                 const obj = this.getObjectByKey(incomingObjects[l].key, savedObjects)
                 await this.updateObjectsValueByAccountIdAndKey(obj, incomingObjects[l].value)
-                console.log("Обновлен обьект: " + incomingObjects[l].key)
             } catch (e) {
                 if (e == 'object not found') {
                     await this.saveObject(accountId, incomingObjects[l].key, incomingObjects[l].value)
                     console.log("Сохранен новый обьект: " + incomingObjects[l].key)
                     continue
                 }
-                console.log("Хз чего произошло")
                 throw e
             }
         }
@@ -92,8 +71,8 @@ export class AppService {
         let status = 200
 
         try {
-            const resonseDataDTO = await this.dataGetHandler(data)
-            responseDTO.data = resonseDataDTO
+            const dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
+            responseDTO.data = await this.dataGetLogic(dataDTO)
         }
         catch (e) {
             if (e == 'sessions not found' || e == 'session expired') {
@@ -111,17 +90,6 @@ export class AppService {
         responseDTO.status = status
 
         return responseDTO
-    }
-
-    async dataGetHandler(data: any): Promise<ResonseDataDTO> {
-        let dataDTO
-        try {
-            dataDTO = new DataDTO(data.accountId, data.sessionId, data.dataObjects)
-        } catch (e) {
-            throw "parsing data error"
-        }
-
-        return this.dataGetLogic(dataDTO)
     }
 
     async dataGetLogic(dataDTO: DataDTO): Promise<ResonseDataDTO> {
