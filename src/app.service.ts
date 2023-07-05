@@ -140,7 +140,7 @@ export class AppService {
                 console.log("Пришел пустой обьект")
                 continue
             }
-            dataObjects.push(new DataObjectsDTO(arr[l].nameStorage, arr[l].obj))
+            dataObjects.push(new DataObjectsDTO(arr[l].nameModel, arr[l].obj))
         }
         return dataObjects
     }
